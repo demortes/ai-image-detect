@@ -6,8 +6,7 @@ import os
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
-@app.function_name(name="Detect")
-@app.route(route="http_trigger")
+@app.route(route="detect")
 def detect(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
     imgUrl = req.params.get('url')
