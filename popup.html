@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenID Auth</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 15px;
+      width: 250px; 
+    }
+    #userInfo {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      min-height: 40px; /* To avoid layout shift when text changes */
+    }
+    #statusMessage {
+      margin: 0;
+      color: #555;
+    }
+    #loginName {
+      font-weight: bold;
+      color: #333;
+      margin: 5px 0 0 0;
+    }
+    button {
+      padding: 8px 15px;
+      margin-top: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    #loginButton {
+      background-color: #4CAF50; /* Green */
+      color: white;
+    }
+    #logoutButton {
+      background-color: #f44336; /* Red */
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="userInfo">
+    <p id="statusMessage">Loading...</p>
+    <p id="loginName" style="display: none;"></p> 
+  </div>
+  <button id="loginButton">Login</button>
+  <button id="logoutButton" style="display: none;">Logout</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
