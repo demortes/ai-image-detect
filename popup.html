@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Image Detection</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      text-align: center;
+      padding: 15px;
+      width: 260px;
+      background: #181c20;
+      color: #f1f1f1;
+    }
+    #userInfo {
+      margin-bottom: 15px;
+      padding: 12px;
+      border: 1px solid #23272f;
+      border-radius: 8px;
+      background: #23272f;
+      min-height: 48px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    #statusMessage {
+      margin: 0;
+      color: #b0b8c1;
+      font-size: 15px;
+    }
+    #loginName {
+      font-weight: 600;
+      color: #7ee787;
+      margin: 7px 0 0 0;
+      font-size: 16px;
+    }
+    button {
+      padding: 9px 18px;
+      margin-top: 12px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      font-size: 15px;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    }
+    #loginButton {
+      background-color: #238636;
+      color: #fff;
+    }
+    #loginButton:hover:enabled {
+      background-color: #2ea043;
+    }
+    #logoutButton {
+      background-color: #da3633;
+      color: #fff;
+    }
+    #logoutButton:hover:enabled {
+      background-color: #f85149;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    ::selection {
+      background: #238636;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div id="userInfo">
+    <p id="statusMessage">Loading...</p>
+    <p id="loginName" style="display: none;"></p> 
+  </div>
+  <button id="loginButton">Login</button>
+  <button id="logoutButton" style="display: none;">Logout</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
