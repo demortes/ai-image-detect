@@ -133,4 +133,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.message === "loginSuccess") {
+      // Handle login success (e.g., update UI)
+      console.log("Login successful:", message.profile);
+    }
+  });
 });
