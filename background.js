@@ -82,7 +82,7 @@ async function authenticate(interactive) {
           .then(tokens => {
             if (tokens.error) {
               const errorMsg = `Token exchange failed: ${tokens.error_description || tokens.error}`;
-              chrome.storage.local.set({ authError: errorMsg, userInfo: null });
+              chrome.storage.sync.set({ authError: errorMsg, userInfo: null });
               return;
             }
             const idToken = tokens.id_token;
@@ -93,19 +93,19 @@ async function authenticate(interactive) {
               email_verified: jwt?.email_verified ?? null,
               groups: jwt?.groups || []
             };
-            chrome.storage.local.set({ userInfo: user, authError: null }, () => {
-              chrome.storage.local.remove('authError');
+            chrome.storage.sync.set({ userInfo: user, authError: null }, () => {
+              chrome.storage.sync.remove('authError');
               chrome.runtime.sendMessage({ message: "loginSuccess", profile: user });
             });
           })
           .catch(error => {
             const errorMsg = `Token exchange request failed: ${error.message}`;
-            chrome.storage.local.set({ authError: errorMsg, userInfo: null });
+            chrome.storage.sync.set({ authError: errorMsg, userInfo: null });
           });
         });
       } else {
         const errorMsg = "No authorization code found in responseUrl.";
-        chrome.storage.local.set({ authError: errorMsg, userInfo: null });
+        chrome.storage.sync.set({ authError: errorMsg, userInfo: null });
       }
     }
   );
@@ -113,12 +113,12 @@ async function authenticate(interactive) {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "login" || request.type === "login") {
-    chrome.storage.local.remove('authError', () => {
+    chrome.storage.sync.remove('authError', () => {
       authenticate(true);
     });
     return true;
   } else if (request.message === "getProfile" || request.type === "getProfile") {
-    chrome.storage.local.get(["userInfo", "authError"], (data) => {
+    chrome.storage.sync.get(["userInfo", "authError"], (data) => {
       if (chrome.runtime.lastError) {
         sendResponse({ error: chrome.runtime.lastError.message });
         return;
@@ -130,14 +130,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  chrome.storage.local.remove('authError', () => {
+  chrome.storage.sync.remove('authError', () => {
     authenticate(false);
   });
 });
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install" || details.reason === "update") {
-    chrome.storage.local.remove('authError', () => {
+    chrome.storage.sync.remove('authError', () => {
       authenticate(false);
     });
   }
