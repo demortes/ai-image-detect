@@ -21,8 +21,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Archive extension files
+        working-directory: extension
         run: |
-          zip -r extension.zip . \
+          zip -r ../extension.zip . \
             -x '*.git*' '*.github*' 'node_modules/*' '*.md' '*.MD' '*.txt' '*.yml' '*.yaml' '.vscode/*'
 
       - name: Upload artifact
@@ -39,7 +40,4 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: chrome-extension
-
-      # Add your deployment step here if you want to automate publishing to the Chrome Web Store.
-      # For example, use https://github.com/marketplace/actions/chrome-extension-upload
-      # Or leave this as an artifact for manual upload.
+          path: ./extension
