@@ -22,7 +22,8 @@ jobs:
 
       - name: Archive extension files
         run: |
-          zip -r extension.zip . -x '*.git*' '*.github*' 'node_modules/*'
+          zip -r extension.zip . \
+            -x '*.git*' '*.github*' 'node_modules/*' '*.md' '*.MD' '*.txt' '*.yml' '*.yaml' '.vscode/*'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
