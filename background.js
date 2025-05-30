@@ -1,7 +1,7 @@
 // REMEMBER TO REPLACE 'YOUR_CLIENT_ID' WITH YOUR ACTUAL CLIENT ID FROM AUTH.DEMORTES.COM
 
 const authEndpoint = 'https://auth.demortes.com/application/o/authorize/';
-const clientId = 'YOUR_CLIENT_ID'; 
+const clientId = 'YOUR_CLIENT_ID';
 const redirectUri = chrome.identity.getRedirectURL("oauth2");
 const scopes = ['openid', 'profile', 'email'];
 
@@ -99,7 +99,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "login" || request.type === "login") { // Accommodate both message structures
     // Clear previous errors before attempting new login
     chrome.storage.local.remove('authError', () => {
-        authenticate(true);
+      authenticate(true);
     });
     return true; // Indicates an asynchronous response
   } else if (request.message === "getProfile" || request.type === "getProfile") {
@@ -132,22 +132,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     console.log("Extension installed/updated, attempting non-interactive auth.");
     // Clear previous errors before attempting new login
     chrome.storage.local.remove('authError', () => {
-        authenticate(false);
+      authenticate(false);
     });
   }
 });
-        // The authenticate(false) call might result in a new profile or an error,
-        // both of which would be caught by storage listeners in the popup.
-        // So, we might not need to send an explicit response here,
-        // or we could wait for authenticate to complete if it returned a Promise.
-        // For now, let the popup rely on storage changes.
-        // The authenticate call above will attempt to get a profile or set an error.
-        // No explicit sendResponse({ needsLogin: true }) as the popup will react to storage.
-      }
-    });
-    return true; // Indicates an asynchronous response
-  }
-  // Add other message handlers if needed
-});
-
-// ... (onStartup and onInstalled listeners remain the same but ensure they also clear authError before calling authenticate)
