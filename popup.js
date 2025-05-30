@@ -5,7 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoutButton = document.getElementById('logoutButton');
 
   const userInfoKey = 'userInfo'; // Consistent with background.js
-  const authErrorKey = 'authError'; // Consistent with background.js
+  const authErrorKey = 'authError'; /**
+   * Updates the popup UI to reflect the current authentication state.
+   *
+   * Adjusts the visibility, text, and styling of status messages, login name, and login/logout buttons based on whether the user is logged in, logged out, or an authentication error has occurred.
+   *
+   * @param {Object|null} userInfo - The current user information, or null if not logged in.
+   * @param {string|null} error - An authentication error message, or null if no error.
+   */
 
   function updateUI(userInfo, error) {
     statusMessageEl.style.color = 'black'; // Default color
