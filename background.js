@@ -88,7 +88,10 @@ async function authenticate(interactive) {
             const idToken = tokens.id_token;
             const jwt = parseJwt(idToken);
             const user = {
-              loginName: jwt?.name || jwt?.preferred_username || jwt?.email || "Unknown User"
+              loginName: jwt?.name || jwt?.preferred_username || jwt?.email || "Unknown User",
+              email: jwt?.email || null,
+              email_verified: jwt?.email_verified ?? null,
+              groups: jwt?.groups || []
             };
             chrome.storage.local.set({ userInfo: user, authError: null }, () => {
               chrome.storage.local.remove('authError');
