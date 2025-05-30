@@ -6,9 +6,10 @@ const redirectUri = chrome.identity.getRedirectURL("oauth2");
 const scopes = ['openid', 'profile', 'email'];
 
 /**
- * Decodes a JWT token and returns its payload as an object.
- * @param {string} token - The JWT token to decode.
- * @returns {object|null} The decoded payload, or null if decoding fails.
+ * Decodes a JWT token and returns its payload as a JavaScript object.
+ *
+ * @param {string} token - A JWT token string.
+ * @returns {object|null} The decoded payload object, or null if the token is malformed or cannot be decoded.
  */
 function parseJwt(token) {
   try {
@@ -24,9 +25,10 @@ function parseJwt(token) {
 }
 
 /**
- * Generates a PKCE code verifier.
- * @param {number} length - The length of the code verifier.
- * @returns {string} The generated code verifier.
+ * Generates a cryptographically random PKCE code verifier string.
+ *
+ * @param {number} [length=128] - Desired length of the code verifier.
+ * @returns {string} A random string suitable for use as a PKCE code verifier.
  */
 function generateCodeVerifier(length = 128) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
@@ -36,9 +38,10 @@ function generateCodeVerifier(length = 128) {
 }
 
 /**
- * Generates a PKCE code challenge from a code verifier.
- * @param {string} codeVerifier - The code verifier.
- * @returns {Promise<string>} The generated code challenge.
+ * Computes a PKCE code challenge by hashing the provided code verifier with SHA-256 and encoding it in base64 URL-safe format.
+ *
+ * @param {string} codeVerifier - The PKCE code verifier string.
+ * @returns {Promise<string>} A promise that resolves to the base64 URL-encoded SHA-256 hash of the code verifier.
  */
 async function generateCodeChallenge(codeVerifier) {
   const encoder = new TextEncoder();
@@ -50,8 +53,11 @@ async function generateCodeChallenge(codeVerifier) {
 }
 
 /**
- * Initiates the authentication flow using PKCE and handles the OAuth2 process.
- * @param {boolean} interactive - Whether to prompt the user interactively.
+ * Performs OAuth2 authentication using PKCE, handling user interaction, token exchange, and user profile extraction.
+ *
+ * Initiates the authorization flow with the Demortes authentication service, optionally prompting the user. Exchanges the authorization code for tokens, parses the ID token to extract user information, and stores the result or any errors in Chrome storage. Notifies other extension components upon successful login.
+ *
+ * @param {boolean} interactive - If true, prompts the user for authentication; if false, attempts silent authentication.
  */
 async function authenticate(interactive) {
   const nonce = Math.random().toString(36).substring(2, 15);
