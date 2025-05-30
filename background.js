@@ -5,6 +5,11 @@ const clientId = 'n5VWXQV2oNpyFpspkGQRYGLRPtEh6uLLAfDlHexf';
 const redirectUri = chrome.identity.getRedirectURL("oauth2");
 const scopes = ['openid', 'profile', 'email'];
 
+/**
+ * Decodes a JWT token and returns its payload as an object.
+ * @param {string} token - The JWT token to decode.
+ * @returns {object|null} The decoded payload, or null if decoding fails.
+ */
 function parseJwt(token) {
   try {
     const base64Url = token.split('.')[1];
@@ -18,7 +23,11 @@ function parseJwt(token) {
   }
 }
 
-// PKCE helpers
+/**
+ * Generates a PKCE code verifier.
+ * @param {number} length - The length of the code verifier.
+ * @returns {string} The generated code verifier.
+ */
 function generateCodeVerifier(length = 128) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
   let array = new Uint8Array(length);
@@ -26,6 +35,11 @@ function generateCodeVerifier(length = 128) {
   return Array.from(array).map(x => chars[x % chars.length]).join('');
 }
 
+/**
+ * Generates a PKCE code challenge from a code verifier.
+ * @param {string} codeVerifier - The code verifier.
+ * @returns {Promise<string>} The generated code challenge.
+ */
 async function generateCodeChallenge(codeVerifier) {
   const encoder = new TextEncoder();
   const data = encoder.encode(codeVerifier);
@@ -35,6 +49,10 @@ async function generateCodeChallenge(codeVerifier) {
   return base64Digest;
 }
 
+/**
+ * Initiates the authentication flow using PKCE and handles the OAuth2 process.
+ * @param {boolean} interactive - Whether to prompt the user interactively.
+ */
 async function authenticate(interactive) {
   const nonce = Math.random().toString(36).substring(2, 15);
   const codeVerifier = generateCodeVerifier();
@@ -111,6 +129,9 @@ async function authenticate(interactive) {
   );
 }
 
+/**
+ * Handles messages from popup.js for login and profile retrieval.
+ */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "login" || request.type === "login") {
     chrome.storage.sync.remove('authError', () => {
@@ -129,12 +150,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+/**
+ * On browser startup, clears any previous authentication errors and attempts silent authentication.
+ */
 chrome.runtime.onStartup.addListener(() => {
   chrome.storage.sync.remove('authError', () => {
     authenticate(false);
   });
 });
 
+/**
+ * On extension install or update, clears authentication errors and attempts silent authentication.
+ */
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install" || details.reason === "update") {
     chrome.storage.sync.remove('authError', () => {
